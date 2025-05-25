@@ -1,0 +1,372 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{setspace}
+\usepackage[english]{babel}
+\usepackage{bm}
+\usepackage{enumitem}
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+\setlength{\parindent}{0pt}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{geometry}
+\usepackage{float}
+
+\title{Foundations of Machine Learning Assignment 5}
+\date{ 26. May 2025}
+\author{
+Daniel Atighetchi - 3664061- B.Sc.Informatik \\
+Omar Aboulgadayel - 3610497 - M.Sc.Informatik
+}
+
+
+
+\begin{document}
+
+\doublespacing
+\maketitle
+
+
+\section*{Question 1: }
+
+\subsection* {Task 1: }
+
+
+
+
+
+
+\newpage
+
+
+
+\section*{Question 2:}
+
+\textbf{Task 1:}
+
+\textbf{The formula we must use is:}
+
+\[
+P(\text{Flu} \mid \text{Fever} = \text{Yes}, \text{Cough} = \text{No}) 
+\propto P(\text{Flu}) \cdot P(\text{Fever} = \text{Yes} \mid \text{Flu}) \cdot P(\text{Cough} = \text{No} \mid \text{Flu})
+\]
+
+
+
+\vspace{1cm}
+
+
+
+\textbf {Applying Laplace Smoothing}
+
+\vspace{1cm}
+
+The formula for Laplace Smoothing is :
+
+\[
+P(X = x \mid C) = \frac{\text{count}(X = x \text{ in class } C) + \lambda}{\text{total cases in class } C + \lambda \times \text{number of possible values of } X}
+\]
+
+
+\[
+\lambda = 1 (Given) 
+\]
+
+\vspace{0.5cm}
+
+Number of possible values of X here is 2, since Flu and Cough are binary variables
+
+
+
+\vspace{1cm}
+
+
+
+\textbf{Likelihood for Fever:}
+
+\begin{itemize}
+  \item \textbf{Flu class:}
+  \begin{align*}
+    P(\text{Fever} = \text{Yes} \mid \text{Flu}) &= \frac{24 + 1}{30 + 2} = \frac{25}{32} 
+      \end{align*}
+      \begin{align*}
+    P(\text{Fever} = \text{No} \mid \text{Flu}) &= \frac{6 + 1}{30 + 2} = \frac{7}{32}
+  \end{align*}
+
+\vspace{.5cm}
+
+  \item \textbf{No Flu class:}
+  \begin{align*}
+    P(\text{Fever} = \text{Yes} \mid \text{No Flu}) &= \frac{8 + 1}{30 + 2} = \frac{9}{32} 
+      \end{align*}
+      \begin{align*}
+    P(\text{Fever} = \text{No} \mid \text{No Flu}) &= \frac{22 + 1}{30 + 2} = \frac{23}{32}
+  \end{align*}
+\end{itemize}
+
+\vspace{1em}
+\textbf{Likelihood for Cough:}
+
+\vspace{0.5cm}
+
+\begin{itemize}
+  \item \textbf{Flu class:}
+  \begin{align*}
+    P(\text{Cough} = \text{Yes} \mid \text{Flu}) &= \frac{21 + 1}{30 + 2} = \frac{22}{32} 
+    \end{align*}
+    
+    \begin{align*}
+    P(\text{Cough} = \text{No} \mid \text{Flu}) &= \frac{9 + 1}{30 + 2} = \frac{10}{32}
+  \end{align*}
+
+  \item \textbf{No Flu class:}
+  \begin{align*}
+    P(\text{Cough} = \text{Yes} \mid \text{No Flu}) &= \frac{12 + 1}{30 + 2} = \frac{13}{32} 
+   \end{align*}
+   
+    \begin{align*}
+    P(\text{Cough} = \text{No} \mid \text{No Flu}) &= \frac{18 + 1}{30 + 2} = \frac{19}{32}
+  \end{align*}
+\end{itemize}
+
+\vspace{1cm}
+
+\textbf{Application to new Patient: (Fever = Yes, Cough = No):}
+
+\vspace{0.3cm}
+
+\textbf{Compute the joint likelihood for each class:}
+
+\begin{itemize}
+    \item \textbf{Flu:}
+    \[
+    P(\text{Fever} = \text{Yes} \mid \text{Flu}) \times P(\text{Cough} = \text{No} \mid \text{Flu}) 
+    = \frac{25}{32} \times \frac{10}{32} = \frac{250}{1024}
+    \]
+
+    \item \textbf{No Flu:}
+    \[
+    P(\text{Fever} = \text{Yes} \mid \text{No Flu}) \times P(\text{Cough} = \text{No} \mid \text{No Flu}) 
+    = \frac{9}{32} \times \frac{19}{32} = \frac{171}{1024}
+    \]
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Posterior probabilities (unnormalized):}
+
+\[
+P(\text{Flu} \mid \text{Evidence}) \propto P(\text{Flu}) \times \frac{250}{1024} = 0.5 \times \frac{250}{1024} = \frac{125}{1024}
+\]
+
+\[
+P(\text{No Flu} \mid \text{Evidence}) \propto P(\text{No Flu}) \times \frac{171}{1024} = 0.5 \times \frac{171}{1024} = \frac{85.5}{1024}
+\]
+
+\vspace{0.3cm}
+
+\textbf{Normalize:}
+
+\[
+\text{Total} = 125 + 85.5 = 210.5
+\]
+
+\[
+P(\text{Flu} \mid \text{Evidence}) = \frac{125}{210.5} \approx 0.5938
+\]
+
+\[
+P(\text{No Flu} \mid \text{Evidence}) = \frac{85.5}{210.5} \approx 0.4062
+\]
+
+\vspace{0.3cm}
+
+\textbf{Predicted class:} Flu (since $0.5938 > 0.4062$)
+
+
+\newpage
+
+\subsection*{Task 2:}
+
+
+\textbf{Gaussian Likelihood Formula}
+
+\begin{align*}
+P(T = t \mid C) &= \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left( -\frac{(t - \mu)^2}{2\sigma^2} \right)
+\end{align*}
+
+\textbf{Plug in $T = 37.8$}
+
+\vspace{1cm}
+
+\textbf{Flu: } $\bm{\mu} = 38.0, \quad \bm{\sigma}^2 = 0.25, \quad \bm{\sigma} = 0.5$
+\begin{align*}
+P(T = 37.8 \mid \text{Flu}) &= \frac{1}{\sqrt{2\pi \cdot 0.25}} \exp\left( -\frac{(37.8 - 38.0)^2}{2 \cdot 0.25} \right) \\
+&= \frac{1}{\sqrt{0.5\pi}} \exp\left( -\frac{0.04}{0.5} \right) \\
+&\approx 0.7979 \cdot \exp(-0.08) \\
+&\approx 0.7979 \cdot 0.9231 \\
+&\approx 0.7365
+\end{align*}
+
+\textbf{No Flu: } $\bm{\mu} = 36.8, \quad \bm{\sigma}^2 = 0.16, \quad \bm{\sigma} = 0.4$
+\begin{align*}
+P(T = 37.8 \mid \text{No Flu}) &= \frac{1}{\sqrt{2\pi \cdot 0.16}} \exp\left( -\frac{(37.8 - 36.8)^2}{2 \cdot 0.16} \right) \\
+&= \frac{1}{\sqrt{0.32\pi}} \exp\left( -\frac{1.0}{0.32} \right) \\
+&\approx 0.9979 \cdot \exp(-3.125) \\
+&\approx 0.9979 \cdot 0.0439 \\
+&\approx 0.0438
+\end{align*}
+
+\newpage
+
+\textbf{Update the Joint Likelihoods from Task 1 with Temperature}
+
+\textbf{Flu}
+\begin{align*}
+\text{Previous joint (Fever, Cough)} &= \frac{250}{1024} \approx 0.2441 \\
+\text{New joint} &= 0.2441 \cdot 0.7365 \approx 0.1798
+\end{align*}
+
+\textbf{No Flu}
+\begin{align*}
+\text{Previous joint (Fever, Cough)} &= \frac{171}{1024} \approx 0.1670 \\
+\text{New joint} &= 0.1670 \cdot 0.0438 \approx 0.0073
+\end{align*}
+
+\textbf{Posterior Probabilities (Unnormalized)}
+
+\begin{align*}
+P(\text{Flu} \mid \text{Evidence}) &\propto 0.5 \cdot 0.1798 = 0.0899 \\
+P(\text{No Flu} \mid \text{Evidence}) &\propto 0.5 \cdot 0.0073 = 0.00365
+\end{align*}
+
+\textbf{Normalize}
+
+\begin{align*}
+\text{Total} &= 0.0899 + 0.00365 = 0.09355 \\
+P(\text{Flu} \mid \text{Evidence}) &= \frac{0.0899}{0.09355} \approx 0.9610 \\
+P(\text{No Flu} \mid \text{Evidence}) &= \frac{0.00365}{0.09355} \approx 0.0390
+\end{align*}
+
+\textbf{Predicted Class: Flu (since $0.9610 > 0.0390)$}
+
+\vspace{1cm}
+
+
+
+The temperature feature strongly reinforces the prediction of Flu, increasing the posterior probability from approximately 0.59 to approximately 0.96. This is because 37.8°C is much more likely under the Flu temperature distribution than under the No Flu distribution.
+
+
+\newpage
+
+\subsection*{Task 3:}
+
+
+Lets define
+\begin{align*}
+P(\text{Flu}) &= p \\
+P(\text{No Flu}) &= 1 - p
+\end{align*}
+
+\textbf{Calculated in Task 2:}
+\begin{align*}
+\text{Likelihood}(\text{Flu}) &= 0.1798 \\
+\text{Likelihood}(\text{No Flu}) &= 0.0073
+\end{align*}
+
+\textbf{Set posterior probabilities equal:}
+\begin{align*}
+p \cdot 0.1798 &= (1 - p) \cdot 0.0073 \\
+0.1798p &= 0.0073 - 0.0073p \\
+0.1798p + 0.0073p &= 0.0073 \\
+(0.1798 + 0.0073)p &= 0.0073 \\
+0.1871p &= 0.0073 \\
+p &= \frac{0.0073}{0.1871} \approx 0.0390
+\end{align*}
+
+\textbf{Conclusion:} If $P(\text{Flu}) < 0.039$ ($P(\text{No Flu}) > 0.961$), the decision changes to \textbf{No Flu}.
+
+
+
+\newpage
+
+\subsection*{Task 4:}
+
+\vspace{1cm}
+
+If the temperature feature is missing, the model relies only on the categorical features (Fever and Cough), resulting in posterior probabilities of approximately 0.59 for Flu and 0.41 for No Flu. The prediction remains Flu, but with reduced confidence, as the absence of temperature data weakens the evidence and lowers the Flu posterior from ~0.96 to ~0.59.
+
+
+\newpage
+
+\section*{Question 3:}
+
+
+\subsection*{Task 1:}
+
+\textbf{Mean and Standard Deviation for each class:}
+
+\begin{itemize}
+    \item \textbf{Athlete = Yes:}
+    \begin{itemize}
+        \item Heights: 180, 178, 185, 182, 177, 186, 164
+        \item 
+        \[
+        \mu_{\text{Yes}} = \frac{180 + 178 + 185 + 182 + 177 + 186 + 164}{7} = \frac{1252}{7} \approx 178.857
+        \]
+        \item 
+        \[
+        \sigma_{\text{Yes}} = \sqrt{\frac{(180 - 178.857)^2 + (178 - 178.857)^2 + \cdots + (164 - 178.857)^2}{7}} \approx 6.812
+        \]
+    \end{itemize}
+
+    \item \textbf{Athlete = No:}
+    \begin{itemize}
+        \item Heights: 172, 165, 160, 170, 158, 168, 162
+        \item 
+        \[
+        \mu_{\text{No}} = \frac{172 + 165 + 160 + 170 + 158 + 168 + 162}{7} = \frac{1155}{7} = 165
+        \]
+        \item 
+        \[
+        \sigma_{\text{No}} = \sqrt{\frac{(172 - 165)^2 + (165 - 165)^2 + \cdots + (162 - 165)^2}{7}} \approx 4.870
+        \]
+    \end{itemize}
+\end{itemize}
+
+\vspace{1cm}
+
+\textbf{Gaussian Likelihood Formula}
+
+\begin{align*}
+P(T = t \mid C) &= \frac{1}{\sqrt{2\pi\sigma^2}} \exp\left( -\frac{(t - \mu)^2}{2\sigma^2} \right)
+\end{align*}
+
+\textbf{Plug in $T = 174$}
+
+\vspace{1cm}
+
+\textbf{Yes: } $\bm{\mu} = 178.857, \quad \bm{\sigma}^2 = 46.4, \quad \bm{\sigma} = 6.812$
+\begin{align*}
+P(T = 174 \mid \text{Yes}) &= \frac{1}{\sqrt{2\pi \cdot 46.4}} \exp\left( -\frac{(174 - 178.857)^2}{2 \cdot 46.4} \right) \\
+&= \frac{1}{\sqrt{0.5\pi}} \exp\left( -\frac{0.04}{0.5} \right) \\
+&\approx 0.7979 \cdot \exp(-0.08) \\
+&\approx 0.7979 \cdot 0.9231 \\
+&\approx 0.7365
+\end{align*}
+
+\textbf{No: } $\bm{\mu} = 165, \quad \bm{\sigma}^2 = 23.717, \quad \bm{\sigma} = 4.870$
+\begin{align*}
+P(T = 37.8 \mid \text{No Flu}) &= \frac{1}{\sqrt{2\pi \cdot 0.16}} \exp\left( -\frac{(37.8 - 36.8)^2}{2 \cdot 0.16} \right) \\
+&= \frac{1}{\sqrt{0.32\pi}} \exp\left( -\frac{1.0}{0.32} \right) \\
+&\approx 0.9979 \cdot \exp(-3.125) \\
+&\approx 0.9979 \cdot 0.0439 \\
+&\approx 0.0438
+\end{align*}
+
+
+
+\end{document}
